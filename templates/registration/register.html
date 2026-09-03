@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load socialaccount %}
 {% block title %}Sign Up — Uni-Store{% endblock %}
 {% block content %}
 <div style="max-width: 440px; margin: 3rem auto;">
   <div class="card" style="padding: 2.25rem;">
     <div style="text-align: center; margin-bottom: 1.75rem;">
-      <img src="/static/images/logo.png" alt="Uni-Store" style="height: 48px; margin-bottom: 0.75rem;">
+      <img src="{% static 'images/logo.png' %}" alt="Uni-Store" style="height: 48px; margin-bottom: 0.75rem;">
       <h1 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.25rem; color: var(--color-text-primary);">Create your account</h1>
       <p style="color: var(--color-text-secondary); font-size: 0.875rem;">Join the campus circular economy</p>
     </div>

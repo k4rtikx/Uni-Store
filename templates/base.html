@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,14 +20,6 @@
       /* Accent — energy, likes, badges, highlights */
       --color-accent: #F97316;
       --color-accent-light: #FAECE7;
-      --color-accent-dark: #993C1D;
-
-      /* Neutrals — backgrounds & text */
-      --color-bg: #F8FAFC;
-      --color-surface: #FFFFFF;
-      --color-text-primary: #0F172A;
-      --color-text-secondary: #64748B;
-      --color-border: #E2E8F0;
 
       /* Semantic colors */
       --color-success: #16A34A;   /* item sold, order confirmed */
@@ -303,7 +296,7 @@
 
 <nav>
   <a href="{% url 'home' %}" class="nav-brand" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
-    <img src="/static/images/logo.png" alt="Uni-Store Logo" style="height:42px;width:auto;max-width:180px;object-fit:contain;display:block;" />
+    <img src="{% static 'images/logo.png' %}" alt="Uni-Store Logo" style="height:42px;width:auto;max-width:180px;object-fit:contain;display:block;" />
   </a>
 
   <!-- AI Chatbot Search Bar (replaces old search) -->
@@ -349,7 +342,7 @@
 
 <footer>
   <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:0.5rem;">
-    <img src="/static/images/logo.png" alt="Uni-Store Logo" style="height:32px;width:auto;object-fit:contain;display:inline-block;" />
+    <img src="{% static 'images/logo.png' %}" alt="Uni-Store Logo" style="height:32px;width:auto;object-fit:contain;display:inline-block;" />
   </div>
   <p>Campus Circular Economy &nbsp;·&nbsp; EduWaste Loop Hackathon 2026</p>
 </footer>
