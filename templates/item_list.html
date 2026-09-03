@@ -58,6 +58,13 @@
       {% endif %}
 
       <div style="display:flex;gap:6px;margin-bottom:0.75rem;flex-wrap:wrap;align-items:center;">
+        {% if item.is_sold %}
+          {% if user.is_authenticated and item.buyer == user %}
+            <span class="badge" style="background:rgba(34,197,94,0.2);color:#4ade80;border:1px solid rgba(34,197,94,0.4);font-weight:700;">✅ You Bought This</span>
+          {% else %}
+            <span class="badge" style="background:rgba(239,68,68,0.18);color:#f87171;border:1px solid rgba(239,68,68,0.3);font-weight:700;">🔒 SOLD</span>
+          {% endif %}
+        {% endif %}
         {% if item.listing_type == 'rent' %}
           <span class="badge badge-yellow">💰 Rent: ₹{{ item.rent_price_per_day }}/day</span>
         {% elif item.listing_type == 'buy' %}
@@ -83,7 +90,17 @@
       </div>
 
       <div style="display:flex;gap:8px;">
-        {% if item.listing_type == 'buy' %}
+        {% if item.is_sold %}
+          {% if user.is_authenticated and item.buyer == user %}
+            <button disabled class="btn btn-ghost" style="flex:1;justify-content:center;padding:7px 12px;font-size:0.8rem;border-color:rgba(34,197,94,0.4);color:#4ade80;cursor:default;">
+              ✅ Purchased by You
+            </button>
+          {% else %}
+            <button disabled class="btn btn-ghost" style="flex:1;justify-content:center;padding:7px 12px;font-size:0.8rem;opacity:0.6;cursor:not-allowed;">
+              🔒 Sold Out
+            </button>
+          {% endif %}
+        {% elif item.listing_type == 'buy' %}
           <a href="{% url 'start_chat' item.id %}" class="btn btn-accent" style="flex:1;justify-content:center;padding:7px 12px;font-size:0.8rem;background:#38bdf8;color:#0a0f1a;">
             🛒 Buy (₹{{ item.price }})
           </a>

@@ -64,6 +64,10 @@ class Item(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     posted_on = models.DateTimeField(auto_now_add=True)
 
+    # Purchase status (e.g. bought by a student)
+    is_sold = models.BooleanField(default=False, verbose_name="Sold / Completed")
+    buyer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='purchases')
+
     def __str__(self):
         return self.title
 

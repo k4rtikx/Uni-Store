@@ -234,6 +234,7 @@ def delete_item(request, item_id):
 def dashboard(request):
     user = request.user
     my_items = Item.objects.filter(seller=user).order_by('-posted_on')
+    purchased_items = Item.objects.filter(buyer=user).order_by('-posted_on')
     wishlist_items = Wishlist.objects.filter(user=user).select_related('item')
     message_threads = Chat.objects.filter(
         Q(buyer=user) | Q(seller=user)
@@ -242,6 +243,7 @@ def dashboard(request):
 
     return render(request, 'dashboard.html', {
         'my_items': my_items,
+        'purchased_items': purchased_items,
         'wishlist_items': wishlist_items,
         'message_threads': message_threads,
         'recent_items': recent_items,
