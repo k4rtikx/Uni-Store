@@ -1,12 +1,12 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 {% block title %}Login{% endblock %}
 {% block content %}
-<div style="max-width:420px;margin:6rem auto;">
-  <div class="card">
+<div style="max-width:420px;margin:4rem auto;">
+  <div class="card" style="padding:2rem;">
     <div style="text-align:center;margin-bottom:2rem;">
-      <div style="font-size:2.5rem;margin-bottom:0.5rem;">🌿</div>
-      <h1 style="font-size:1.5rem;font-weight:800;margin-bottom:0.25rem;">Welcome back</h1>
-      <p style="color:var(--muted);font-size:0.875rem;">Sign in to Uni-Store</p>
+      <div style="font-size:2.5rem;margin-bottom:0.5rem;color:var(--color-primary);">🌿</div>
+      <h1 style="font-size:1.5rem;font-weight:800;margin-bottom:0.25rem;color:var(--color-text-primary);">Welcome back</h1>
+      <p style="color:var(--color-text-secondary);font-size:0.875rem;">Sign in to Uni-Store</p>
     </div>
     <form method="post">
       {% csrf_token %}
@@ -21,8 +21,8 @@
       <button type="submit" class="btn btn-accent" style="width:100%;justify-content:center;margin-top:0.5rem;">Sign In →</button>
     </form>
     <hr>
-    <p style="text-align:center;font-size:0.875rem;color:var(--muted);">
-      No account? <a href="{% url 'register' %}" style="color:var(--accent);text-decoration:none;font-weight:600;">Create one</a>
+    <p style="text-align:center;font-size:0.875rem;color:var(--color-text-secondary);">
+      No account? <a href="{% url 'register' %}" style="color:var(--color-primary);text-decoration:none;font-weight:600;">Create one</a>
     </p>
   </div>
 </div>
