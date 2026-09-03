@@ -68,27 +68,7 @@ If no match → Amazon/Flipkart fallback appears inline
 | `frontend/src/App.jsx` | React Router v6 setup with protected routes | `hackathon-frontend/src/App.jsx` |
 | `frontend/vite.config.js` | Vite config with proxy to Django API | `hackathon-frontend/vite.config.js` |
 
-**Key feature to steal:** Notification service pattern (create notification on resource match found). Vite proxy config that routes `/api` calls to Django locally.
-
-### Reference files location in this repo:
-```
-campus-market/
-├── marketplace/
-│   ├── models_kiraya_ref.py        ← kiraya models to study
-│   ├── serializers_kiraya_ref.py   ← kiraya serializers to study
-│   ├── validators_kiraya_ref.py    ← validators to copy
-│   └── signals_kiraya_ref.py      ← signals to copy
-└── ecotrace_refs/
-    ├── users_models_ref.py         ← multi-role user pattern
-    ├── users_serializers_ref.py    ← JWT auth serializers
-    ├── notifications_models_ref.py ← notification model
-    ├── notifications_services_ref.py ← notification service
-    ├── waste_models_ref.py         ← waste tracking model (study only)
-    ├── App_ref.jsx                 ← React router setup
-    └── vite_config_ref.js          ← Vite proxy config
-```
-
-> 💡 **Rule:** These are **reference files** — read and adapt, don't copy blindly. Delete them after you've implemented the relevant patterns.
+**Key patterns adapted:** Notification service pattern, role handling, clean URL structure, and responsive UI.
 
 ---
 
