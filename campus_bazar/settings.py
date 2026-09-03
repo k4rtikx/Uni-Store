@@ -89,6 +89,8 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+SOCIALACCOUNT_LOGIN_ON_GET = True
+
 ROOT_URLCONF = 'campus_bazar.urls'
 
 TEMPLATES = [
@@ -102,6 +104,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'marketplace.context_processors.google_oauth_context',
             ],
         },
     },

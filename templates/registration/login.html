@@ -1,52 +1,100 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load socialaccount %}
-{% block title %}Login{% endblock %}
+{% block title %}Login — Uni-Store{% endblock %}
 {% block content %}
-<div style="max-width:420px;margin:3rem auto;">
-  <div class="card" style="padding:2.25rem;">
-    <div style="text-align:center;margin-bottom:1.75rem;">
-      <img src="/static/images/logo.png" alt="Uni-Store" style="height:44px;margin-bottom:0.75rem;">
-      <h1 style="font-size:1.5rem;font-weight:800;margin-bottom:0.25rem;color:var(--color-text-primary);">Welcome back</h1>
-      <p style="color:var(--color-text-secondary);font-size:0.875rem;">Sign in to Uni-Store</p>
+<div style="max-width: 440px; margin: 3rem auto;">
+  <div class="card" style="padding: 2.25rem;">
+    <div style="text-align: center; margin-bottom: 1.75rem;">
+      <img src="/static/images/logo.png" alt="Uni-Store" style="height: 48px; margin-bottom: 0.75rem;">
+      <h1 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.25rem; color: var(--color-text-primary);">Welcome back</h1>
+      <p style="color: var(--color-text-secondary); font-size: 0.875rem;">Sign in to your Uni-Store account</p>
     </div>
 
     <!-- Google OAuth CTA -->
-    <a href="{% provider_login_url 'google' %}" style="display:flex;align-items:center;justify-content:center;gap:10px;background:#ffffff;border:1px solid #DADCE0;color:#3c4043;font-weight:600;font-size:0.875rem;padding:10px 16px;border-radius:8px;text-decoration:none;margin-bottom:1.25rem;box-shadow:0 1px 2px rgba(0,0,0,0.05);transition:background-color 0.2s;">
-      <svg width="18" height="18" viewBox="0 0 18 18">
-        <path fill="#4285F4" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z"/>
-        <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.41-1.57-5.13-3.72l-2.9 2.25C2.47 15.65 5.48 18 9 18z"/>
-        <path fill="#FBBC05" d="M3.87 10.8c-.2-.6-.31-1.23-.31-1.8s.11-1.2.31-1.8L.97 4.95C.35 6.18 0 7.55 0 9s.35 2.82.97 4.05l2.9-2.25z"/>
-        <path fill="#EA4335" d="M9 3.58c1.32 0 2.5.46 3.44 1.34l2.58-2.58C13.46.89 11.43 0 9 0 5.48 0 2.47 2.35.97 5.95l2.9 2.25C4.59 5.15 6.62 3.58 9 3.58z"/>
-      </svg>
-      Continue with Google
-    </a>
+    {% if google_oauth_configured %}
+      <a href="{% provider_login_url 'google' %}" style="display:flex;align-items:center;justify-content:center;gap:10px;background:#ffffff;border:1px solid #DADCE0;color:#3c4043;font-weight:600;font-size:0.875rem;padding:10px 16px;border-radius:8px;text-decoration:none;margin-bottom:1.25rem;box-shadow:0 1px 2px rgba(0,0,0,0.05);transition:all 0.2s;">
+        <svg width="18" height="18" viewBox="0 0 18 18">
+          <path fill="#4285F4" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z"/>
+          <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.41-1.57-5.13-3.72l-2.9 2.25C2.47 15.65 5.48 18 9 18z"/>
+          <path fill="#FBBC05" d="M3.87 10.8c-.2-.6-.31-1.23-.31-1.8s.11-1.2.31-1.8L.97 4.95C.35 6.18 0 7.55 0 9s.35 2.82.97 4.05l2.9-2.25z"/>
+          <path fill="#EA4335" d="M9 3.58c1.32 0 2.5.46 3.44 1.34l2.58-2.58C13.46.89 11.43 0 9 0 5.48 0 2.47 2.35.97 5.95l2.9 2.25C4.59 5.15 6.62 3.58 9 3.58z"/>
+        </svg>
+        Continue with Google
+      </a>
+    {% else %}
+      <button type="button" onclick="document.getElementById('google-config-modal').style.display='flex'" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#ffffff;border:1px solid #DADCE0;color:#3c4043;font-weight:600;font-size:0.875rem;padding:10px 16px;border-radius:8px;cursor:pointer;margin-bottom:1.25rem;box-shadow:0 1px 2px rgba(0,0,0,0.05);transition:all 0.2s;">
+        <svg width="18" height="18" viewBox="0 0 18 18">
+          <path fill="#4285F4" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z"/>
+          <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.41-1.57-5.13-3.72l-2.9 2.25C2.47 15.65 5.48 18 9 18z"/>
+          <path fill="#FBBC05" d="M3.87 10.8c-.2-.6-.31-1.23-.31-1.8s.11-1.2.31-1.8L.97 4.95C.35 6.18 0 7.55 0 9s.35 2.82.97 4.05l2.9-2.25z"/>
+          <path fill="#EA4335" d="M9 3.58c1.32 0 2.5.46 3.44 1.34l2.58-2.58C13.46.89 11.43 0 9 0 5.48 0 2.47 2.35.97 5.95l2.9 2.25C4.59 5.15 6.62 3.58 9 3.58z"/>
+        </svg>
+        Continue with Google
+      </button>
+    {% endif %}
 
-    <div style="display:flex;align-items:center;gap:1rem;margin:1.25rem 0;color:var(--color-text-secondary);font-size:0.78rem;">
-      <span style="flex:1;height:1px;background:var(--color-border);"></span>
-      <span>OR</span>
-      <span style="flex:1;height:1px;background:var(--color-border);"></span>
+    <div style="display: flex; align-items: center; gap: 1rem; margin: 1.25rem 0; color: var(--color-text-secondary); font-size: 0.78rem;">
+      <span style="flex: 1; height: 1px; background: var(--color-border);"></span>
+      <span>OR WITH USERNAME / EMAIL</span>
+      <span style="flex: 1; height: 1px; background: var(--color-border);"></span>
     </div>
 
-    <form method="post">
+    <!-- Direct Username/Email and Password Form -->
+    <form method="post" action="{% url 'login' %}">
       {% csrf_token %}
-      {% for field in form %}
-        <div class="form-group">
-          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-          {{ field }}
-          {% if field.errors %}<ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
-          {% if field.help_text %}<p class="helptext">{{ field.help_text }}</p>{% endif %}
-        </div>
-      {% endfor %}
-      <div style="text-align:right;margin-bottom:1rem;margin-top:-0.5rem;">
-        <a href="{% url 'password_reset' %}" style="font-size:0.8rem;color:var(--color-primary);text-decoration:none;font-weight:500;">Forgot password?</a>
+      <div class="form-group">
+        <label for="id_username">Username or Email</label>
+        <input type="text" name="username" id="id_username" placeholder="e.g. kartik or student@college.edu" required autofocus autocomplete="username">
       </div>
-      <button type="submit" class="btn btn-accent" style="width:100%;justify-content:center;">Sign In →</button>
+
+      <div class="form-group">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <label for="id_password" style="margin-bottom: 0;">Password</label>
+          <a href="{% url 'password_reset' %}" style="font-size: 0.8rem; color: var(--color-primary); text-decoration: none; font-weight: 500;">Forgot password?</a>
+        </div>
+        <input type="password" name="password" id="id_password" placeholder="••••••••" required autocomplete="current-password">
+      </div>
+
+      <button type="submit" class="btn btn-accent" style="width: 100%; justify-content: center; margin-top: 0.75rem; padding: 11px;">
+        Sign In →
+      </button>
     </form>
 
-    <hr>
-    <p style="text-align:center;font-size:0.875rem;color:var(--color-text-secondary);">
-      No account? <a href="{% url 'register' %}" style="color:var(--color-primary);text-decoration:none;font-weight:600;">Create one</a>
+    <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid var(--color-border);">
+    <p style="text-align: center; font-size: 0.875rem; color: var(--color-text-secondary);">
+      No account? <a href="{% url 'register' %}" style="color: var(--color-primary); text-decoration: none; font-weight: 600;">Create one</a>
     </p>
+  </div>
+</div>
+
+<!-- Google OAuth Info Modal when client_id is not yet set -->
+<div id="google-config-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 9999; align-items: center; justify-content: center; padding: 1rem;">
+  <div class="card" style="max-width: 480px; width: 100%; padding: 2rem; border-color: rgba(66, 133, 244, 0.4);">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <svg width="24" height="24" viewBox="0 0 18 18">
+          <path fill="#4285F4" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z"/>
+          <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.41-1.57-5.13-3.72l-2.9 2.25C2.47 15.65 5.48 18 9 18z"/>
+          <path fill="#FBBC05" d="M3.87 10.8c-.2-.6-.31-1.23-.31-1.8s.11-1.2.31-1.8L.97 4.95C.35 6.18 0 7.55 0 9s.35 2.82.97 4.05l2.9-2.25z"/>
+          <path fill="#EA4335" d="M9 3.58c1.32 0 2.5.46 3.44 1.34l2.58-2.58C13.46.89 11.43 0 9 0 5.48 0 2.47 2.35.97 5.95l2.9 2.25C4.59 5.15 6.62 3.58 9 3.58z"/>
+        </svg>
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--color-text-primary);">Google Sign-In Setup</h3>
+      </div>
+      <button onclick="document.getElementById('google-config-modal').style.display='none'" style="background: none; border: none; color: var(--color-text-secondary); font-size: 1.25rem; cursor: pointer;">✕</button>
+    </div>
+    <p style="color: var(--color-text-secondary); font-size: 0.875rem; margin-bottom: 1.25rem; line-height: 1.5;">
+      To enable Google OAuth for this campus application, add your Google Cloud OAuth Client ID and Secret in your <code style="background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: 4px; color: var(--color-primary);">.env</code> file:
+    </p>
+    <div style="background: rgba(0,0,0,0.4); border: 1px solid var(--color-border); border-radius: 8px; padding: 1rem; font-family: monospace; font-size: 0.8rem; color: var(--color-text-primary); margin-bottom: 1.25rem; word-break: break-all;">
+      GOOGLE_CLIENT_ID=your_id.apps.googleusercontent.com<br>
+      GOOGLE_CLIENT_SECRET=your_client_secret
+    </div>
+    <p style="color: var(--color-text-secondary); font-size: 0.8rem; margin-bottom: 1.5rem;">
+      You can still sign in right away using standard <strong>Username/Email and Password</strong>!
+    </p>
+    <button onclick="document.getElementById('google-config-modal').style.display='none'" class="btn btn-accent" style="width: 100%; justify-content: center;">
+      Got it, use standard login
+    </button>
   </div>
 </div>
 {% endblock %}
