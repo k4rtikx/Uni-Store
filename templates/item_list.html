@@ -60,6 +60,8 @@
       <div style="display:flex;gap:6px;margin-bottom:0.75rem;flex-wrap:wrap;align-items:center;">
         {% if item.listing_type == 'rent' %}
           <span class="badge badge-yellow">💰 Rent: ₹{{ item.rent_price_per_day }}/day</span>
+        {% elif item.listing_type == 'buy' %}
+          <span class="badge" style="background:rgba(56,189,248,0.15);color:#38bdf8;border:1px solid rgba(56,189,248,0.3);">🏷️ Buy: ₹{{ item.price }}</span>
         {% elif item.listing_type == 'lend' %}
           <span class="badge badge-green">🔄 Lend</span>
         {% elif item.listing_type == 'share' %}
@@ -81,9 +83,19 @@
       </div>
 
       <div style="display:flex;gap:8px;">
-        <a href="{% url 'start_chat' item.id %}" class="btn btn-accent" style="flex:1;justify-content:center;padding:7px 12px;font-size:0.8rem;">
-          💬 Request
-        </a>
+        {% if item.listing_type == 'buy' %}
+          <a href="{% url 'start_chat' item.id %}" class="btn btn-accent" style="flex:1;justify-content:center;padding:7px 12px;font-size:0.8rem;background:#38bdf8;color:#0a0f1a;">
+            🛒 Buy (₹{{ item.price }})
+          </a>
+        {% elif item.listing_type == 'rent' %}
+          <a href="{% url 'start_chat' item.id %}" class="btn btn-accent" style="flex:1;justify-content:center;padding:7px 12px;font-size:0.8rem;">
+            💰 Rent
+          </a>
+        {% else %}
+          <a href="{% url 'start_chat' item.id %}" class="btn btn-accent" style="flex:1;justify-content:center;padding:7px 12px;font-size:0.8rem;">
+            💬 Request
+          </a>
+        {% endif %}
         {% if user.is_authenticated %}
           {% if item.is_in_wishlist %}
             <a href="{% url 'remove_from_wishlist' item.id %}" class="btn btn-ghost btn-like liked" style="padding:7px 12px;font-size:0.9rem;color:var(--color-accent);background-color:var(--color-accent-light);border-color:rgba(249,115,22,0.3);">♥</a>

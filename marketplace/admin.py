@@ -3,7 +3,7 @@ from .models import Item, Category, Wishlist, Chat, Message
 
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ['title', 'seller', 'listing_type', 'rent_price_per_day', 'condition', 'category', 'posted_on']
+    list_display = ['title', 'seller', 'listing_type', 'price', 'rent_price_per_day', 'condition', 'category', 'posted_on']
     search_fields = ['title', 'description']
     list_filter = ['listing_type', 'category', 'condition']
 

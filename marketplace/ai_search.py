@@ -46,6 +46,7 @@ so the backend can query the database. You NEVER invent product details.
 - donate -> free, keep it
 - share  -> common use
 - rent   -> paid per day, must return
+- buy    -> one-time second-hand purchase
 
 ## Behavior rules
 
@@ -53,9 +54,9 @@ so the backend can query the database. You NEVER invent product details.
    From the user message extract:
      - keywords      (str)       the main search term(s)
      - category      (str|null)  category name if mentioned
-     - min_price     (float|null) minimum rent price per day if mentioned
-     - max_price     (float|null) maximum rent price per day if mentioned
-     - listing_type  ("lend"|"donate"|"share"|"rent"|null) if mentioned
+     - min_price     (float|null) minimum rent price per day or buy price if mentioned
+     - max_price     (float|null) maximum rent price per day or buy price if mentioned
+     - listing_type  ("lend"|"donate"|"share"|"rent"|"buy"|null) if mentioned
      - attributes    (object)    any other attributes like condition, colour, etc.
    If the query is vague (e.g. "show me something nice") set needs_clarification=true
    and write ONE short clarifying question in clarification_question.
@@ -132,18 +133,20 @@ def search_products(query="", category=None, listing_type=None,
         except (ValueError, TypeError):
             qs = qs.filter(category__name__icontains=str(category).strip())
 
-    if listing_type and listing_type.lower() in ("lend", "donate", "share", "rent"):
+    if listing_type and listing_type.lower() in ("lend", "donate", "share", "rent", "buy"):
         qs = qs.filter(listing_type=listing_type.lower())
 
     if min_price is not None:
         try:
-            qs = qs.filter(rent_price_per_day__gte=float(min_price))
+            val = float(min_price)
+            qs = qs.filter(Q(rent_price_per_day__gte=val) | Q(price__gte=val))
         except (ValueError, TypeError):
             pass
 
     if max_price is not None:
         try:
-            qs = qs.filter(rent_price_per_day__lte=float(max_price))
+            val = float(max_price)
+            qs = qs.filter(Q(rent_price_per_day__lte=val) | Q(price__lte=val))
         except (ValueError, TypeError):
             pass
 
@@ -166,6 +169,7 @@ def search_products(query="", category=None, listing_type=None,
             "listing_type": item.listing_type,
             "badge_label":  badge_label,
             "badge_color":  badge_color,
+            "price":        float(item.price) if item.price else 0.0,
             "rent_price":   float(item.rent_price_per_day) if item.rent_price_per_day else 0.0,
             "rent_price_per_day": float(item.rent_price_per_day) if item.rent_price_per_day else 0.0,
             "condition":    item.condition,
@@ -226,6 +230,8 @@ def _heuristic_extract_intent(text):
         listing_type = "donate"
     elif "rent" in lowered or "hire" in lowered:
         listing_type = "rent"
+    elif "buy" in lowered or "purchase" in lowered or "for sale" in lowered or "sell" in lowered:
+        listing_type = "buy"
     elif "share" in lowered or "common" in lowered:
         listing_type = "share"
 
@@ -290,6 +296,7 @@ def _heuristic_narrate(user_query, items):
     count = len(items)
     free_items = [i for i in items if i.get("listing_type") in ("lend", "donate", "share")]
     rent_items = [i for i in items if i.get("listing_type") == "rent"]
+    buy_items  = [i for i in items if i.get("listing_type") == "buy"]
 
     first_item = items[0]
     badge_label = first_item.get("badge_label") or first_item.get("listing_type", "").capitalize()
@@ -300,21 +307,24 @@ def _heuristic_narrate(user_query, items):
         f"✅ **Available!** Found {count} resource{'s' if count > 1 else ''} matching \"{user_query}\"."
     ]
 
-    if free_items and rent_items:
+    if buy_items:
+        buy_val = float(buy_items[0].get("price") or 0)
+        narration_parts.append(
+            f"Available to buy second-hand starting at ₹{buy_val:.0f} (e.g. {buy_items[0].get('title')})."
+        )
+    if free_items:
         free_title = free_items[0].get("title", "Item")
         free_badge = free_items[0].get("badge_label") or "Free"
+        narration_parts.append(
+            f"Free options include {free_title} ({free_badge})."
+        )
+    if rent_items:
         rent_val = float(rent_items[0].get("rent_price") or rent_items[0].get("rent_price_per_day") or 0)
         narration_parts.append(
-            f"You have both free options (like {free_title} for {free_badge}) "
-            f"and rental options starting at ₹{rent_val:.0f}/day."
+            f"Rental options start at ₹{rent_val:.0f}/day."
         )
-    elif rent_items:
-        rent_val = float(rent_items[0].get("rent_price") or rent_items[0].get("rent_price_per_day") or 0)
-        narration_parts.append(
-            f"Available for rent from ₹{rent_val:.0f}/day "
-            f"(e.g., {first_item.get('title')} in {condition} condition)."
-        )
-    else:
+
+    if not buy_items and not free_items and not rent_items:
         narration_parts.append(
             f"Top match: {first_item.get('title')} ({badge_label}) in {condition} condition from @{seller}."
         )
@@ -496,6 +506,7 @@ def run_ai_search(user_query, session):
                 "badge_label":        i["badge_label"],
                 "category":           i["category"],
                 "condition":          i["condition"],
+                "buy_price":          i.get("price", 0.0),
                 "rent_price_per_day": i["rent_price"],
                 "seller":             i["seller"],
             }

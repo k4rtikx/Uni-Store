@@ -18,6 +18,7 @@ class Item(models.Model):
         ('donate', 'Donate (Free, keep it)'),
         ('share',  'Share / Common Use'),
         ('rent',   'Rent (Paid, return needed)'),
+        ('buy',    'Buy / Sell (One-time purchase)'),
     ]
     CONDITION_CHOICES = [
         ('New',  'New'),
@@ -31,7 +32,7 @@ class Item(models.Model):
     description = models.TextField()
     image = models.ImageField(upload_to='item_images/', blank=True, null=True)
 
-    # Listing type — Lend / Donate / Share / Rent
+    # Listing type — Lend / Donate / Share / Rent / Buy
     listing_type = models.CharField(
         max_length=10,
         choices=LISTING_TYPE_CHOICES,
@@ -39,7 +40,15 @@ class Item(models.Model):
         verbose_name='Listing Type',
     )
 
-    # Only used when listing_type == 'rent'
+    # Price when listing_type == 'buy'
+    price = models.DecimalField(
+        max_digits=8, decimal_places=2,
+        default=0,
+        verbose_name='Buy Price (₹)',
+        help_text='Price if listing for sale/buy',
+    )
+
+    # Price per day when listing_type == 'rent'
     rent_price_per_day = models.DecimalField(
         max_digits=8, decimal_places=2,
         default=0,
@@ -63,12 +72,17 @@ class Item(models.Model):
         return self.listing_type == 'rent'
 
     @property
+    def is_for_sale(self):
+        return self.listing_type == 'buy'
+
+    @property
     def listing_type_badge(self):
         colors = {
             'lend':   ('#34d399', '🔄 Lend'),
             'donate': ('#6ee7b7', '🎁 Donate'),
             'share':  ('#818cf8', '🤝 Share'),
             'rent':   ('#fbbf24', '💰 Rent'),
+            'buy':    ('#38bdf8', '🏷️ Buy'),
         }
         return colors.get(self.listing_type, ('#94a3b8', self.listing_type))
 
