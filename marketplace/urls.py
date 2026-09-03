@@ -1,7 +1,7 @@
 # marketplace/urls.py
 from django.urls import path
 from . import views
-   
+
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -21,8 +21,6 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('signup/', views.signup, name='signup'),
     path('dashboard/', views.dashboard, name='dashboard'),
-
-
+    path('api/ai-search/', views.ai_search_api, name='ai_search_api'),
+    path('api/ai-search/clear/', views.ai_search_clear, name='ai_search_clear'),
 ]
-
-
