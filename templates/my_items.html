@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}My Items{% endblock %}
+{% block content %}
+<div class="page-header"><h1>My Listings</h1><p>Resources you've shared with the campus</p></div>
+<div style="margin-bottom:1rem;"><a href="{% url 'post_item' %}" class="btn btn-accent">+ Share New Resource</a></div>
+<div class="grid-3">
+{% for item in items %}
+<div class="card">
+  {% if item.image %}<img src="{{ item.image.url }}" alt="{{ item.title }}" class="item-img">
+  {% else %}<div class="item-img-placeholder">??</div>{% endif %}
+  <h3 class="item-title">{{ item.title }}</h3>
+  <p style="font-size:0.8rem;color:var(--muted);margin-bottom:1rem;">{{ item.posted_on|date:"M d, Y" }}</p>
+  <div style="display:flex;gap:8px;">
+    <a href="{% url 'edit_item' item.id %}" class="btn btn-ghost" style="flex:1;justify-content:center;font-size:0.8rem;">Edit</a>
+    <a href="{% url 'delete_item' item.id %}" class="btn btn-danger" style="font-size:0.8rem;">Delete</a>
+  </div>
+</div>
+{% empty %}
+<div style="grid-column:1/-1;text-align:center;padding:4rem;">
+  <div style="font-size:3rem;margin-bottom:1rem;">??</div>
+  <p style="color:var(--muted);">You haven't shared anything yet.</p>
+  <a href="{% url 'post_item' %}" class="btn btn-accent" style="margin-top:1rem;">Share Something</a>
+</div>
+{% endfor %}
+</div>
+{% endblock %}

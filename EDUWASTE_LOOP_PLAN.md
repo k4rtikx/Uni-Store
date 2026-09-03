@@ -13,6 +13,7 @@
 | 🔍 Search → AI Chatbot | The search bar is **replaced** with a Gemini AI chatbot. Users type natural language requests directly in the navbar. |
 | 🔗 Git disconnected | Repo disconnected from 17Anurag/Campus-Market. Fresh `git init` done. Ready to push to your own remote. |
 | 📦 Reference repos cloned | `kiraya` + `ecotrace-pfa` cloned and studied. Useful files copied as `_ref` files. |
+| 💰 Renting Support | Added `listing_type` (`lend`, `donate`, `share`, `rent`) and `rent_price_per_day` (₹/day) to Item model, forms, admin, and views. |
 
 ---
 

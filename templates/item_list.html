@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block title %}Browse Resources{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Browse Resources</h1>
+  <p>Find what you need — or help someone else</p>
+</div>
+
+<!-- Filter bar -->
+<div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.75rem;align-items:center;">
+  <form method="get" style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center;flex:1;">
+    <input type="text" name="q" placeholder="Search resources..." value="{{ query|default:'' }}"
+           style="max-width:260px;flex:1;">
+    <select name="category" onchange="this.form.submit()">
+      <option value="all" {% if selected_category == 'all' %}selected{% endif %}>All Categories</option>
+      {% for cat in categories %}
+        <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-accent">Search</button>
+    {% if query or selected_category != 'all' %}
+      <a href="{% url 'item_list' %}" class="btn btn-ghost">Clear</a>
+    {% endif %}
+  </form>
+  <a href="{% url 'post_item' %}" class="btn btn-accent">+ Share Resource</a>
+</div>
+
+{% if items %}
+  <p style="color:var(--muted);font-size:0.875rem;margin-bottom:1.25rem;">{{ items|length }} resource{{ items|length|pluralize }} found</p>
+  <div class="grid-3">
+    {% for item in items %}
+    <div class="card" style="cursor:pointer;">
+      {% if item.image %}
+        <img src="{{ item.image.url }}" alt="{{ item.title }}" class="item-img">
+      {% else %}
+        <div class="item-img-placeholder">📦</div>
+      {% endif %}
+
+      <div style="display:flex;gap:6px;margin-bottom:0.75rem;flex-wrap:wrap;align-items:center;">
+        {% if item.listing_type == 'rent' %}
+          <span class="badge badge-yellow">💰 Rent: ₹{{ item.rent_price_per_day }}/day</span>
+        {% elif item.listing_type == 'lend' %}
+          <span class="badge badge-green">🔄 Lend</span>
+        {% elif item.listing_type == 'share' %}
+          <span class="badge badge-purple">🤝 Share</span>
+        {% else %}
+          <span class="badge badge-green">🎁 Donate</span>
+        {% endif %}
+        {% if item.category %}<span class="badge badge-purple">{{ item.category.name }}</span>{% endif %}
+        <span class="badge badge-yellow">{{ item.condition }}</span>
+      </div>
+
+      <h3 class="item-title">{{ item.title }}</h3>
+      <p style="font-size:0.825rem;color:var(--muted);margin-bottom:0.75rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
+        {{ item.description }}
+      </p>
+      <div class="item-meta" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+        <span>by {{ item.seller.username }}</span>
+        <span>{{ item.posted_on|date:"M d" }}</span>
+      </div>
+
+      <div style="display:flex;gap:8px;">
+        <a href="{% url 'start_chat' item.id %}" class="btn btn-accent" style="flex:1;justify-content:center;padding:7px 12px;font-size:0.8rem;">
+          💬 Request
+        </a>
+        {% if user.is_authenticated %}
+          {% if item.is_in_wishlist %}
+            <a href="{% url 'remove_from_wishlist' item.id %}" class="btn btn-ghost" style="padding:7px 12px;font-size:0.8rem;">♥</a>
+          {% else %}
+            <a href="{% url 'add_to_wishlist' item.id %}" class="btn btn-ghost" style="padding:7px 12px;font-size:0.8rem;">♡</a>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div style="text-align:center;padding:5rem 1rem;">
+    <div style="font-size:4rem;margin-bottom:1rem;">🔍</div>
+    <h2 style="font-size:1.25rem;font-weight:700;margin-bottom:0.5rem;">No resources found</h2>
+    <p style="color:var(--muted);margin-bottom:1.5rem;">
+      {% if query %}No results for "{{ query }}". Try a different search.{% else %}Be the first to share something!{% endif %}
+    </p>
+    <a href="{% url 'post_item' %}" class="btn btn-accent">+ Share a Resource</a>
+  </div>
+{% endif %}
+
+{% endblock %}

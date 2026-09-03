@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+<!-- Hero Section -->
+<div style="text-align:center;padding:4rem 0 3rem;">
+  <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(110,231,183,0.1);border:1px solid rgba(110,231,183,0.2);border-radius:50px;padding:6px 16px;font-size:0.8rem;font-weight:600;color:var(--accent);margin-bottom:1.5rem;">
+    ✨ Gemini AI-powered Resource Matching
+  </div>
+  <h1 style="font-size:3rem;font-weight:900;line-height:1.15;margin-bottom:1rem;">
+    Campus Resources,<br>
+    <span style="background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Shared Smartly</span>
+  </h1>
+  <p style="font-size:1.1rem;color:var(--muted);max-width:540px;margin:0 auto 2rem;">
+    Lend, donate, or share textbooks, lab equipment, and supplies with your campus community.
+    No more waste. No more buying what already exists nearby.
+  </p>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+    <a href="{% url 'item_list' %}" class="btn btn-accent">Browse Resources →</a>
+    <a href="{% url 'post_item' %}" class="btn btn-ghost">+ Share Something</a>
+  </div>
+</div>
+
+<!-- Stats strip -->
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin:2rem 0 3rem;">
+  {% for stat in stats %}
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;text-align:center;">
+    <div style="font-size:1.75rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">{{ stat.value }}</div>
+    <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;">{{ stat.label }}</div>
+  </div>
+  {% empty %}
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;text-align:center;">
+    <div style="font-size:1.75rem;font-weight:800;color:var(--accent);">0</div>
+    <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;">Resources Shared</div>
+  </div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;text-align:center;">
+    <div style="font-size:1.75rem;font-weight:800;color:var(--accent2);">₹0</div>
+    <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;">Money Saved</div>
+  </div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;text-align:center;">
+    <div style="font-size:1.75rem;font-weight:800;color:#34d399;">0 kg</div>
+    <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;">CO₂ Prevented</div>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- Categories -->
+<div style="margin-bottom:3rem;">
+  <h2 style="font-size:1.25rem;font-weight:700;margin-bottom:1.25rem;">Browse by Category</h2>
+  <div style="display:flex;flex-wrap:wrap;gap:0.75rem;">
+    {% for cat in categories %}
+    <a href="{% url 'item_list' %}?category={{ cat.id }}"
+       style="background:var(--surface);border:1px solid var(--border);border-radius:50px;padding:8px 18px;color:var(--text);text-decoration:none;font-size:0.875rem;font-weight:500;transition:all 0.2s;"
+       onmouseover="this.style.borderColor='rgba(110,231,183,0.4)';this.style.color='var(--accent)'"
+       onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text)'">
+      {{ cat.name }}
+    </a>
+    {% empty %}
+    <p style="color:var(--muted);font-size:0.875rem;">No categories yet. <a href="/admin/" style="color:var(--accent);">Add some in admin →</a></p>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- How it works -->
+<div style="margin-bottom:3rem;">
+  <h2 style="font-size:1.25rem;font-weight:700;margin-bottom:1.25rem;">How Uni-Store Works</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;">
+    {% for step in steps %}
+    <div class="card" style="border-left:3px solid var(--accent);">
+      <div style="font-size:1.75rem;margin-bottom:0.75rem;">{{ step.icon }}</div>
+      <h3 style="font-size:0.95rem;font-weight:700;margin-bottom:0.4rem;">{{ step.title }}</h3>
+      <p style="font-size:0.825rem;color:var(--muted);">{{ step.desc }}</p>
+    </div>
+    {% empty %}
+    <div class="card" style="border-left:3px solid var(--accent);">
+      <div style="font-size:1.75rem;margin-bottom:0.75rem;">📸</div>
+      <h3 style="font-size:0.95rem;font-weight:700;margin-bottom:0.4rem;">1. Post a Resource</h3>
+      <p style="font-size:0.825rem;color:var(--muted);">Upload a photo. Gemini AI auto-detects what it is, its condition, and who'd want it.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--accent2);">
+      <div style="font-size:1.75rem;margin-bottom:0.75rem;">✨</div>
+      <h3 style="font-size:0.95rem;font-weight:700;margin-bottom:0.4rem;">2. AI Matches Needs</h3>
+      <p style="font-size:0.825rem;color:var(--muted);">Type what you need in plain English. Gemini finds the right campus resource and explains why.</p>
+    </div>
+    <div class="card" style="border-left:3px solid #34d399;">
+      <div style="font-size:1.75rem;margin-bottom:0.75rem;">♻️</div>
+      <h3 style="font-size:0.95rem;font-weight:700;margin-bottom:0.4rem;">3. Share & Track Impact</h3>
+      <p style="font-size:0.825rem;color:var(--muted);">Every reuse earns green points and is tracked: money saved, CO₂ prevented, waste avoided.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

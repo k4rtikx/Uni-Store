@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Post a Resource{% endblock %}
+{% block content %}
+<div style="max-width:600px;margin:0 auto;">
+  <div class="page-header">
+    <h1>Share a Resource</h1>
+    <p>Help campus community — lend, donate, or share something you're not using</p>
+  </div>
+
+  <!-- Gemini AI hint banner -->
+  <div style="background:linear-gradient(135deg,rgba(110,231,183,0.08),rgba(129,140,248,0.08));border:1px solid rgba(110,231,183,0.2);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1.75rem;display:flex;gap:12px;align-items:flex-start;">
+    <span style="font-size:1.5rem;">✨</span>
+    <div>
+      <p style="font-size:0.875rem;font-weight:600;color:var(--accent);margin-bottom:2px;">Gemini AI will analyze your photo</p>
+      <p style="font-size:0.8rem;color:var(--muted);">Upload an image and Gemini will auto-suggest the name, category, and condition — coming in the full build.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="form-group">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}<ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+          {% if field.help_text %}<p class="helptext">{{ field.help_text }}</p>{% endif %}
+        </div>
+      {% endfor %}
+      <div style="display:flex;gap:0.75rem;margin-top:0.5rem;">
+        <button type="submit" class="btn btn-accent" style="flex:1;justify-content:center;">Post Resource ♻️</button>
+        <a href="{% url 'item_list' %}" class="btn btn-ghost">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

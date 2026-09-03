@@ -3,9 +3,9 @@ from .models import Item, Category, Wishlist, Chat, Message
 
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ['title', 'seller', 'price', 'condition', 'category', 'posted_on']
+    list_display = ['title', 'seller', 'listing_type', 'rent_price_per_day', 'condition', 'category', 'posted_on']
     search_fields = ['title', 'description']
-    list_filter = ['category', 'condition']
+    list_filter = ['listing_type', 'category', 'condition']
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):

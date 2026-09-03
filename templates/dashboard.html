@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Dashboard</h1>
+  <p>Welcome back, <strong>{{ user.username }}</strong> 👋</p>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem;">
+  <div class="card" style="text-align:center;border-top:3px solid var(--accent);">
+    <div style="font-size:2rem;font-weight:800;color:var(--accent);">{{ my_items.count }}</div>
+    <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;">Resources Shared</div>
+  </div>
+  <div class="card" style="text-align:center;border-top:3px solid var(--accent2);">
+    <div style="font-size:2rem;font-weight:800;color:var(--accent2);">{{ wishlist_items.count }}</div>
+    <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;">Saved Items</div>
+  </div>
+  <div class="card" style="text-align:center;border-top:3px solid #34d399;">
+    <div style="font-size:2rem;font-weight:800;color:#34d399;">{{ message_threads.count }}</div>
+    <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;">Conversations</div>
+  </div>
+  <div class="card" style="text-align:center;border-top:3px solid #fbbf24;">
+    <div style="font-size:2rem;font-weight:800;color:#fbbf24;">🌱 0</div>
+    <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;">Green Points</div>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+  <!-- My listings -->
+  <div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <h2 style="font-size:1rem;font-weight:700;">My Listings</h2>
+      <a href="{% url 'post_item' %}" class="btn btn-accent" style="padding:6px 14px;font-size:0.8rem;">+ New</a>
+    </div>
+    {% for item in my_items %}
+    <div class="card" style="margin-bottom:0.75rem;display:flex;gap:12px;align-items:center;padding:1rem;">
+      <div style="font-size:1.75rem;">📦</div>
+      <div style="flex:1;min-width:0;">
+        <p style="font-weight:600;font-size:0.875rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ item.title }}</p>
+        <p style="font-size:0.75rem;color:var(--muted);">{{ item.posted_on|date:"M d, Y" }}</p>
+      </div>
+      <a href="{% url 'edit_item' item.id %}" class="btn btn-ghost" style="padding:5px 10px;font-size:0.75rem;">Edit</a>
+    </div>
+    {% empty %}
+    <div class="card" style="text-align:center;padding:2rem;">
+      <p style="color:var(--muted);font-size:0.875rem;">Nothing posted yet.</p>
+      <a href="{% url 'post_item' %}" class="btn btn-accent" style="margin-top:0.75rem;">Share Something</a>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Recent campus resources -->
+  <div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <h2 style="font-size:1rem;font-weight:700;">Recent Campus Resources</h2>
+      <a href="{% url 'item_list' %}" style="font-size:0.8rem;color:var(--accent);text-decoration:none;">View all →</a>
+    </div>
+    {% for item in recent_items %}
+    <div class="card" style="margin-bottom:0.75rem;display:flex;gap:12px;align-items:center;padding:1rem;">
+      <div style="font-size:1.75rem;">🎒</div>
+      <div style="flex:1;min-width:0;">
+        <p style="font-weight:600;font-size:0.875rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ item.title }}</p>
+        <p style="font-size:0.75rem;color:var(--muted);">by {{ item.seller.username }}</p>
+      </div>
+      <a href="{% url 'start_chat' item.id %}" class="btn btn-accent" style="padding:5px 10px;font-size:0.75rem;">Request</a>
+    </div>
+    {% empty %}
+    <div class="card" style="text-align:center;padding:2rem;">
+      <p style="color:var(--muted);font-size:0.875rem;">No resources available yet.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}
