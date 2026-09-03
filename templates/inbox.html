@@ -1,25 +1,28 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 {% block title %}Inbox{% endblock %}
 {% block content %}
-<div class="page-header"><h1>Inbox</h1><p>Your resource conversations</p></div>
+<div class="page-header">
+  <h1>Inbox</h1>
+  <p>Your resource conversations</p>
+</div>
 {% for chat in chats %}
 <a href="{% url 'chat_messages' chat.id %}" style="text-decoration:none;">
-<div class="card" style="display:flex;gap:16px;align-items:center;margin-bottom:0.75rem;padding:1rem;">
-  <div style="font-size:2rem;">??</div>
-  <div style="flex:1;min-width:0;">
-    <p style="font-weight:600;font-size:0.9rem;">{{ chat.item.title }}</p>
-    <p style="font-size:0.775rem;color:var(--muted);">
-      {% if chat.buyer == user %}To {{ chat.seller.username }}{% else %}From {{ chat.buyer.username }}{% endif %}
-      � {{ chat.created_on|date:"M d" }}
-    </p>
+  <div class="card" style="display:flex;gap:16px;align-items:center;margin-bottom:0.75rem;padding:1rem;transition:background-color 0.2s, border-color 0.2s;">
+    <div style="font-size:2rem;color:var(--color-primary);">💬</div>
+    <div style="flex:1;min-width:0;">
+      <p style="font-weight:600;font-size:0.95rem;color:var(--color-text-primary);">{{ chat.item.title }}</p>
+      <p style="font-size:0.8rem;color:var(--color-text-secondary);">
+        {% if chat.buyer == user %}To {{ chat.seller.username }}{% else %}From {{ chat.buyer.username }}{% endif %}
+        · {{ chat.created_on|date:"M d" }}
+      </p>
+    </div>
+    <span style="color:var(--color-primary);font-size:0.9rem;font-weight:600;">Open →</span>
   </div>
-  <span style="color:var(--muted);font-size:0.8rem;">?</span>
-</div>
 </a>
 {% empty %}
 <div style="text-align:center;padding:4rem;">
-<div style="font-size:3rem;margin-bottom:1rem;">??</div>
-<p style="color:var(--muted);">No conversations yet. Request a resource to start chatting.</p>
+  <div style="font-size:3rem;margin-bottom:1rem;color:var(--color-text-secondary);">💬</div>
+  <p style="color:var(--color-text-secondary);">No conversations yet. Request a resource to start chatting.</p>
 </div>
 {% endfor %}
 {% endblock %}

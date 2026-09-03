@@ -1,22 +1,28 @@
-{% extends 'base.html' %}
-{% block title %}Edit Item{% endblock %}
+﻿{% extends 'base.html' %}
+{% block title %}Edit Listing{% endblock %}
 {% block content %}
 <div style="max-width:600px;margin:0 auto;">
-<div class="page-header"><h1>Edit Resource</h1></div>
-<div class="card">
-<form method="post" enctype="multipart/form-data">
-{% csrf_token %}
-{% for field in form %}
-<div class="form-group">
-<label>{{ field.label }}</label>{{ field }}
-{% if field.errors %}<ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
-</div>
-{% endfor %}
-<div style="display:flex;gap:0.75rem;">
-<button type="submit" class="btn btn-accent" style="flex:1;justify-content:center;">Save Changes</button>
-<a href="{% url 'my_items' %}" class="btn btn-ghost">Cancel</a>
-</div>
-</form>
-</div>
+  <div class="page-header">
+    <h1>Edit Resource</h1>
+    <p>Update listing information</p>
+  </div>
+
+  <div class="card">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="form-group">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}<ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+          {% if field.help_text %}<p class="helptext">{{ field.help_text }}</p>{% endif %}
+        </div>
+      {% endfor %}
+      <div style="display:flex;gap:0.75rem;margin-top:0.5rem;">
+        <button type="submit" class="btn btn-accent" style="flex:1;justify-content:center;">Save Changes</button>
+        <a href="{% url 'my_items' %}" class="btn btn-ghost">Cancel</a>
+      </div>
+    </form>
+  </div>
 </div>
 {% endblock %}

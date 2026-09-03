@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 {% block title %}Post a Resource{% endblock %}
 {% block content %}
 <div style="max-width:600px;margin:0 auto;">
@@ -8,11 +8,11 @@
   </div>
 
   <!-- Gemini AI hint banner -->
-  <div style="background:linear-gradient(135deg,rgba(110,231,183,0.08),rgba(129,140,248,0.08));border:1px solid rgba(110,231,183,0.2);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1.75rem;display:flex;gap:12px;align-items:flex-start;">
-    <span style="font-size:1.5rem;">✨</span>
+  <div style="background-color:var(--color-primary-light);border:1px solid rgba(29,78,216,0.2);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1.75rem;display:flex;gap:12px;align-items:flex-start;">
+    <span style="font-size:1.5rem;color:var(--color-primary);">✨</span>
     <div>
-      <p style="font-size:0.875rem;font-weight:600;color:var(--accent);margin-bottom:2px;">Gemini AI will analyze your photo</p>
-      <p style="font-size:0.8rem;color:var(--muted);">Upload an image and Gemini will auto-suggest the name, category, and condition — coming in the full build.</p>
+      <p style="font-size:0.875rem;font-weight:600;color:var(--color-primary);margin-bottom:2px;">Gemini AI will analyze your photo</p>
+      <p style="font-size:0.8rem;color:var(--color-text-secondary);">Upload an image and Gemini will auto-suggest the name, category, and condition.</p>
     </div>
   </div>
 

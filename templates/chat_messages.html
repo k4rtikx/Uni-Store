@@ -1,31 +1,31 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 {% block title %}Chat{% endblock %}
 {% block content %}
 <div style="max-width:640px;margin:0 auto;">
 <div class="page-header">
-<h1>?? {{ chat.item.title }}</h1>
+<h1>💬 {{ chat.item.title }}</h1>
 <p>
   {% if chat.buyer == user %}Conversation with {{ chat.seller.username }}{% else %}Conversation with {{ chat.buyer.username }}{% endif %}
 </p>
 </div>
-<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;min-height:300px;max-height:500px;overflow-y:auto;margin-bottom:1rem;display:flex;flex-direction:column;gap:0.75rem;">
+<div style="background-color:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius);padding:1.5rem;min-height:300px;max-height:500px;overflow-y:auto;margin-bottom:1rem;display:flex;flex-direction:column;gap:0.75rem;box-shadow:0 1px 3px rgba(15,23,42,0.04);">
 {% for msg in messages %}
 <div style="display:flex;{% if msg.sender == user %}justify-content:flex-end{% endif %}">
   <div style="max-width:75%;padding:10px 14px;border-radius:12px;font-size:0.875rem;
-    {% if msg.sender == user %}background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0a0f1a;{% else %}background:var(--surface-hover);color:var(--text);border:1px solid var(--border);{% endif %}">
+    {% if msg.sender == user %}background-color:var(--color-primary);color:#FFFFFF;{% else %}background-color:var(--color-bg);color:var(--color-text-primary);border:1px solid var(--color-border);{% endif %}">
     {{ msg.content }}
-    <div style="font-size:0.7rem;opacity:0.65;margin-top:4px;text-align:right;">{{ msg.sent_on|date:"H:i" }}</div>
+    <div style="font-size:0.7rem;margin-top:4px;text-align:right;{% if msg.sender == user %}color:rgba(255,255,255,0.85);{% else %}color:var(--color-text-secondary);{% endif %}">{{ msg.sent_on|date:"H:i" }}</div>
   </div>
 </div>
 {% empty %}
-<p style="text-align:center;color:var(--muted);font-size:0.875rem;margin:auto;">No messages yet. Send the first one!</p>
+<p style="text-align:center;color:var(--color-text-secondary);font-size:0.875rem;margin:auto;">No messages yet. Send the first one!</p>
 {% endfor %}
 </div>
 <form method="post" style="display:flex;gap:0.75rem;">
 {% csrf_token %}
-<input type="text" name="content" placeholder="Type a message�" style="flex:1;" required autocomplete="off">
+<input type="text" name="content" placeholder="Type a message..." style="flex:1;" required autocomplete="off">
 <button type="submit" class="btn btn-accent">Send</button>
 </form>
-<div style="margin-top:0.75rem;"><a href="{% url 'inbox' %}" style="color:var(--muted);font-size:0.8rem;text-decoration:none;">? Back to Inbox</a></div>
+<div style="margin-top:0.75rem;"><a href="{% url 'inbox' %}" style="color:var(--color-text-secondary);font-size:0.8rem;text-decoration:none;">← Back to Inbox</a></div>
 </div>
 {% endblock %}

@@ -66,9 +66,9 @@
         </a>
         {% if user.is_authenticated %}
           {% if item.is_in_wishlist %}
-            <a href="{% url 'remove_from_wishlist' item.id %}" class="btn btn-ghost" style="padding:7px 12px;font-size:0.8rem;">♥</a>
+            <a href="{% url 'remove_from_wishlist' item.id %}" class="btn btn-ghost btn-like liked" style="padding:7px 12px;font-size:0.9rem;color:var(--color-accent);background-color:var(--color-accent-light);border-color:rgba(249,115,22,0.3);">♥</a>
           {% else %}
-            <a href="{% url 'add_to_wishlist' item.id %}" class="btn btn-ghost" style="padding:7px 12px;font-size:0.8rem;">♡</a>
+            <a href="{% url 'add_to_wishlist' item.id %}" class="btn btn-ghost btn-like" style="padding:7px 12px;font-size:0.9rem;">♡</a>
           {% endif %}
         {% endif %}
       </div>

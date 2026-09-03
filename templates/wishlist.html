@@ -1,24 +1,27 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 {% block title %}Saved Items{% endblock %}
 {% block content %}
-<div class="page-header"><h1>Saved Resources</h1><p>Items you've bookmarked</p></div>
+<div class="page-header">
+  <h1>Saved Resources</h1>
+  <p>Items you've bookmarked</p>
+</div>
 <div class="grid-3">
 {% for w in wishlist_items %}
 <div class="card">
   {% if w.item.image %}<img src="{{ w.item.image.url }}" alt="{{ w.item.title }}" class="item-img">
-  {% else %}<div class="item-img-placeholder">??</div>{% endif %}
+  {% else %}<div class="item-img-placeholder">📦</div>{% endif %}
   <h3 class="item-title">{{ w.item.title }}</h3>
-  <p style="font-size:0.8rem;color:var(--muted);margin-bottom:1rem;">by {{ w.item.seller.username }}</p>
+  <p style="font-size:0.8rem;color:var(--color-text-secondary);margin-bottom:1rem;">by {{ w.item.seller.username }}</p>
   <div style="display:flex;gap:8px;">
     <a href="{% url 'start_chat' w.item.id %}" class="btn btn-accent" style="flex:1;justify-content:center;font-size:0.8rem;">Request</a>
-    <a href="{% url 'remove_from_wishlist' w.item.id %}" class="btn btn-ghost" style="font-size:0.8rem;">Remove</a>
+    <a href="{% url 'remove_from_wishlist' w.item.id %}" class="btn btn-ghost btn-like liked" style="font-size:0.8rem;color:var(--color-accent);">♥ Remove</a>
   </div>
 </div>
 {% empty %}
 <div style="grid-column:1/-1;text-align:center;padding:4rem;">
-<div style="font-size:3rem;margin-bottom:1rem;">?</div>
-<p style="color:var(--muted);">No saved items. Browse and save resources you need.</p>
-<a href="{% url 'item_list' %}" class="btn btn-accent" style="margin-top:1rem;">Browse Resources</a>
+  <div style="font-size:3rem;margin-bottom:1rem;color:var(--color-accent);">♥</div>
+  <p style="color:var(--color-text-secondary);">No saved items. Browse and save resources you need.</p>
+  <a href="{% url 'item_list' %}" class="btn btn-accent" style="margin-top:1rem;">Browse Resources</a>
 </div>
 {% endfor %}
 </div>
