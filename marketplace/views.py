@@ -14,12 +14,36 @@ from .forms import ItemForm
 
 # ─── Auth ────────────────────────────────────────────────────────────────────
 
+def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    if request.method == 'POST':
+        email_or_user = request.POST.get('email') or request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=email_or_user, password=password)
+        if user is None:
+            user_obj = User.objects.filter(email=email_or_user).first() or User.objects.filter(username=email_or_user).first()
+            if user_obj:
+                user = authenticate(request, username=user_obj.username, password=password)
+
+        if user is not None:
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            messages.success(request, f"Welcome back, {user.username}!")
+            return redirect('home')
+        else:
+            messages.error(request, "Invalid username/email or password.")
+
+    return render(request, 'registration/login.html')
+
+
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            messages.success(request, "Account created successfully!")
             return redirect('home')
     else:
         form = UserCreationForm()
@@ -27,19 +51,13 @@ def register(request):
 
 
 def signup(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('login')
-    else:
-        form = UserCreationForm()
-    return render(request, 'registration/signup.html', {'form': form})
+    return register(request)
 
 
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    messages.info(request, "Logged out successfully.")
+    return redirect('home')
 
 
 # ─── Home / Browse ───────────────────────────────────────────────────────────
