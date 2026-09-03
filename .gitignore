@@ -12,7 +12,8 @@ build/
 *.log
 local_settings.py
 db.sqlite3
-media/
+media/*
+!media/item_images/
 
 # Virtual environments
 venv/
