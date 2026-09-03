@@ -1,6 +1,106 @@
-# 🌿 EduWaste Loop — Build Status & Plan
+# 🌿 Uni-Store (EduWaste Loop) — Build Status & Plan
 > **Hackathon Build Plan** | Django + React + PostgreSQL + Gemini API  
+> Project name: **Uni-Store** (formerly Campus-Market)  
 > Last updated: September 2026
+
+---
+
+## 🆕 Latest Updates
+
+| Update | Detail |
+|---|---|
+| 🏷️ Project renamed | **Campus-Market → Uni-Store** |
+| 🔍 Search → AI Chatbot | The search bar is **replaced** with a Gemini AI chatbot. Users type natural language requests directly in the navbar. |
+| 🔗 Git disconnected | Repo disconnected from 17Anurag/Campus-Market. Fresh `git init` done. Ready to push to your own remote. |
+| 📦 Reference repos cloned | `kiraya` + `ecotrace-pfa` cloned and studied. Useful files copied as `_ref` files. |
+
+---
+
+## 🔍 Chatbot Search Bar — Design Decision
+
+**Old behavior:** Navbar had a text input → SQL keyword filter  
+**New behavior:** Navbar has an **AI Chat input** → sends to `/api/ai/match-request/` → Gemini returns matches
+
+```
+User types in navbar: "I need optics textbook for my physics exam"
+         ↓
+Gemini processes → returns ranked resources with match reasons
+         ↓
+Results slide in below the navbar as a live panel (no page reload)
+         ↓
+If no match → Amazon/Flipkart fallback appears inline
+```
+
+### UI behavior:
+- Navbar chatbot input has a ✨ sparkle icon (signals AI)
+- Typing triggers a loading state (animated dots)
+- Results appear as a dropdown panel below the navbar
+- User can press Enter or click the send button
+- Panel shows: match score bar, Gemini's reason, quick Request button per result
+- On mobile: chatbot input expands to full screen
+
+---
+
+## 📦 Reference Repos — What We Took
+
+### 1. [kiraya](https://github.com/jitnkumarapu/kiraya) — Campus Django Marketplace
+> Full-stack Django campus marketplace with buy/sell/rent/giveaway, clean DRF setup.
+
+| File | What We Take | Destination |
+|---|---|---|
+| `models.py` | `Category` (slug + icon), `UserProfile` (phone/hostel), `Item` (listing_type rent/sell/free), `ItemImage` (multi-image gallery), `Message` (is_read field) | Adapt into `resources/models.py` |
+| `serializers.py` | Clean DRF serializer patterns with nested writes | Adapt into `resources/serializers.py` |
+| `validators.py` | Image size/type validators | Copy directly into `resources/validators.py` |
+| `signals.py` | Auto UserProfile creation on user save | Copy into `resources/signals.py` |
+
+**Key feature to steal:** `listing_type` with `rent/free/sell` maps directly to our `Lend/Donate/Share` model.
+
+### 2. [ecotrace-pfa](https://github.com/SalahKhadir/ecotrace-pfa) — React + Django Waste Management
+> Comprehensive waste tracking system with multi-role users, notifications, React frontend.
+
+| File | What We Take | Destination |
+|---|---|---|
+| `users/models.py` | Multi-role user model (`ADMIN/TRANSPORTEUR/TECHNICIEN`) → adapt to `student/faculty/department` | `accounts/models.py` |
+| `users/serializers.py` | JWT auth serializers with role handling | `accounts/serializers.py` |
+| `notifications/models.py` | Notification model with `is_read`, `notification_type` | `notifications/models.py` (new app) |
+| `notifications/services.py` | Notification creation service functions | `notifications/services.py` |
+| `frontend/src/App.jsx` | React Router v6 setup with protected routes | `hackathon-frontend/src/App.jsx` |
+| `frontend/vite.config.js` | Vite config with proxy to Django API | `hackathon-frontend/vite.config.js` |
+
+**Key feature to steal:** Notification service pattern (create notification on resource match found). Vite proxy config that routes `/api` calls to Django locally.
+
+### Reference files location in this repo:
+```
+campus-market/
+├── marketplace/
+│   ├── models_kiraya_ref.py        ← kiraya models to study
+│   ├── serializers_kiraya_ref.py   ← kiraya serializers to study
+│   ├── validators_kiraya_ref.py    ← validators to copy
+│   └── signals_kiraya_ref.py      ← signals to copy
+└── ecotrace_refs/
+    ├── users_models_ref.py         ← multi-role user pattern
+    ├── users_serializers_ref.py    ← JWT auth serializers
+    ├── notifications_models_ref.py ← notification model
+    ├── notifications_services_ref.py ← notification service
+    ├── waste_models_ref.py         ← waste tracking model (study only)
+    ├── App_ref.jsx                 ← React router setup
+    └── vite_config_ref.js          ← Vite proxy config
+```
+
+> 💡 **Rule:** These are **reference files** — read and adapt, don't copy blindly. Delete them after you've implemented the relevant patterns.
+
+---
+
+## 🔗 Git Setup
+
+```bash
+# Repo is initialized fresh (no old remote)
+git remote add origin https://github.com/YOUR_USERNAME/uni-store.git
+git branch -M main
+git push -u origin main
+```
+
+> Replace `YOUR_USERNAME` with your GitHub username and create a new repo called `uni-store`.
 
 ---
 
@@ -16,6 +116,7 @@
 | Django REST Framework API | ❌ NOT BUILT |
 | JWT Authentication | ❌ NOT BUILT |
 | Resource model (Lend/Donate/Share) | ❌ NOT BUILT |
+| **AI Chatbot Search Bar (replaces search)** | ❌ NOT BUILT — replaces old keyword search |
 | Gemini Image Analysis | ❌ NOT BUILT |
 | Gemini NL Resource Matching | ❌ NOT BUILT |
 | Gemini Reuse Advisor | ❌ NOT BUILT |
